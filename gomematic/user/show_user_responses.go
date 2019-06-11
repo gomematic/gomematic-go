@@ -39,6 +39,13 @@ func (o *ShowUserReader) ReadResponse(response runtime.ClientResponse, consumer 
 		}
 		return nil, result
 
+	case 404:
+		result := NewShowUserNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		result := NewShowUserDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -98,6 +105,35 @@ func (o *ShowUserForbidden) Error() string {
 }
 
 func (o *ShowUserForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewShowUserNotFound creates a ShowUserNotFound with default headers values
+func NewShowUserNotFound() *ShowUserNotFound {
+	return &ShowUserNotFound{}
+}
+
+/*ShowUserNotFound handles this case with default header values.
+
+User not found
+*/
+type ShowUserNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *ShowUserNotFound) Error() string {
+	return fmt.Sprintf("[GET /users/{user_id}][%d] showUserNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ShowUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

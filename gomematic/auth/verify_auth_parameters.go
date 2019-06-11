@@ -20,7 +20,7 @@ import (
 // NewVerifyAuthParams creates a new VerifyAuthParams object
 // with the default values initialized.
 func NewVerifyAuthParams() *VerifyAuthParams {
-	var ()
+
 	return &VerifyAuthParams{
 
 		timeout: cr.DefaultTimeout,
@@ -30,7 +30,7 @@ func NewVerifyAuthParams() *VerifyAuthParams {
 // NewVerifyAuthParamsWithTimeout creates a new VerifyAuthParams object
 // with the default values initialized, and the ability to set a timeout on a request
 func NewVerifyAuthParamsWithTimeout(timeout time.Duration) *VerifyAuthParams {
-	var ()
+
 	return &VerifyAuthParams{
 
 		timeout: timeout,
@@ -40,7 +40,7 @@ func NewVerifyAuthParamsWithTimeout(timeout time.Duration) *VerifyAuthParams {
 // NewVerifyAuthParamsWithContext creates a new VerifyAuthParams object
 // with the default values initialized, and the ability to set a context for a request
 func NewVerifyAuthParamsWithContext(ctx context.Context) *VerifyAuthParams {
-	var ()
+
 	return &VerifyAuthParams{
 
 		Context: ctx,
@@ -50,7 +50,7 @@ func NewVerifyAuthParamsWithContext(ctx context.Context) *VerifyAuthParams {
 // NewVerifyAuthParamsWithHTTPClient creates a new VerifyAuthParams object
 // with the default values initialized, and the ability to set a custom HTTPClient for a request
 func NewVerifyAuthParamsWithHTTPClient(client *http.Client) *VerifyAuthParams {
-	var ()
+
 	return &VerifyAuthParams{
 		HTTPClient: client,
 	}
@@ -60,13 +60,6 @@ func NewVerifyAuthParamsWithHTTPClient(client *http.Client) *VerifyAuthParams {
 for the verify auth operation typically these are written to a http.Request
 */
 type VerifyAuthParams struct {
-
-	/*Token
-	  A token that have to be checked
-
-	*/
-	Token string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -105,17 +98,6 @@ func (o *VerifyAuthParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithToken adds the token to the verify auth params
-func (o *VerifyAuthParams) WithToken(token string) *VerifyAuthParams {
-	o.SetToken(token)
-	return o
-}
-
-// SetToken adds the token to the verify auth params
-func (o *VerifyAuthParams) SetToken(token string) {
-	o.Token = token
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *VerifyAuthParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -123,11 +105,6 @@ func (o *VerifyAuthParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-
-	// path param token
-	if err := r.SetPathParam("token", o.Token); err != nil {
-		return err
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

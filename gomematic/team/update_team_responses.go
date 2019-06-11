@@ -39,8 +39,8 @@ func (o *UpdateTeamReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
-	case 412:
-		result := NewUpdateTeamPreconditionFailed()
+	case 404:
+		result := NewUpdateTeamNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -123,24 +123,24 @@ func (o *UpdateTeamForbidden) readResponse(response runtime.ClientResponse, cons
 	return nil
 }
 
-// NewUpdateTeamPreconditionFailed creates a UpdateTeamPreconditionFailed with default headers values
-func NewUpdateTeamPreconditionFailed() *UpdateTeamPreconditionFailed {
-	return &UpdateTeamPreconditionFailed{}
+// NewUpdateTeamNotFound creates a UpdateTeamNotFound with default headers values
+func NewUpdateTeamNotFound() *UpdateTeamNotFound {
+	return &UpdateTeamNotFound{}
 }
 
-/*UpdateTeamPreconditionFailed handles this case with default header values.
+/*UpdateTeamNotFound handles this case with default header values.
 
-Failed to parse request body
+Team not found
 */
-type UpdateTeamPreconditionFailed struct {
+type UpdateTeamNotFound struct {
 	Payload *models.GeneralError
 }
 
-func (o *UpdateTeamPreconditionFailed) Error() string {
-	return fmt.Sprintf("[PUT /teams/{team_id}][%d] updateTeamPreconditionFailed  %+v", 412, o.Payload)
+func (o *UpdateTeamNotFound) Error() string {
+	return fmt.Sprintf("[PUT /teams/{team_id}][%d] updateTeamNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateTeamPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *UpdateTeamNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

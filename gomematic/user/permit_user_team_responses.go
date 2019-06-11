@@ -39,6 +39,13 @@ func (o *PermitUserTeamReader) ReadResponse(response runtime.ClientResponse, con
 		}
 		return nil, result
 
+	case 404:
+		result := NewPermitUserTeamNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 412:
 		result := NewPermitUserTeamPreconditionFailed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -123,6 +130,35 @@ func (o *PermitUserTeamForbidden) readResponse(response runtime.ClientResponse, 
 	return nil
 }
 
+// NewPermitUserTeamNotFound creates a PermitUserTeamNotFound with default headers values
+func NewPermitUserTeamNotFound() *PermitUserTeamNotFound {
+	return &PermitUserTeamNotFound{}
+}
+
+/*PermitUserTeamNotFound handles this case with default header values.
+
+User or team not found
+*/
+type PermitUserTeamNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *PermitUserTeamNotFound) Error() string {
+	return fmt.Sprintf("[PUT /users/{user_id}/teams][%d] permitUserTeamNotFound  %+v", 404, o.Payload)
+}
+
+func (o *PermitUserTeamNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewPermitUserTeamPreconditionFailed creates a PermitUserTeamPreconditionFailed with default headers values
 func NewPermitUserTeamPreconditionFailed() *PermitUserTeamPreconditionFailed {
 	return &PermitUserTeamPreconditionFailed{}
@@ -130,7 +166,7 @@ func NewPermitUserTeamPreconditionFailed() *PermitUserTeamPreconditionFailed {
 
 /*PermitUserTeamPreconditionFailed handles this case with default header values.
 
-Failed to parse request body
+Team is not assigned
 */
 type PermitUserTeamPreconditionFailed struct {
 	Payload *models.GeneralError
@@ -159,10 +195,10 @@ func NewPermitUserTeamUnprocessableEntity() *PermitUserTeamUnprocessableEntity {
 
 /*PermitUserTeamUnprocessableEntity handles this case with default header values.
 
-Team is not assigned
+Failed to validate request
 */
 type PermitUserTeamUnprocessableEntity struct {
-	Payload *models.GeneralError
+	Payload *models.ValidationError
 }
 
 func (o *PermitUserTeamUnprocessableEntity) Error() string {
@@ -171,7 +207,7 @@ func (o *PermitUserTeamUnprocessableEntity) Error() string {
 
 func (o *PermitUserTeamUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.GeneralError)
+	o.Payload = new(models.ValidationError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

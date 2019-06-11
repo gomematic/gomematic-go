@@ -27,7 +27,7 @@ type Client struct {
 /*
 AppendUserToTeam assigns a team to user
 */
-func (a *Client) AppendUserToTeam(params *AppendUserToTeamParams) (*AppendUserToTeamOK, error) {
+func (a *Client) AppendUserToTeam(params *AppendUserToTeamParams, authInfo runtime.ClientAuthInfoWriter) (*AppendUserToTeamOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAppendUserToTeamParams()
@@ -42,6 +42,7 @@ func (a *Client) AppendUserToTeam(params *AppendUserToTeamParams) (*AppendUserTo
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &AppendUserToTeamReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -55,7 +56,7 @@ func (a *Client) AppendUserToTeam(params *AppendUserToTeamParams) (*AppendUserTo
 /*
 CreateUser creates a new user
 */
-func (a *Client) CreateUser(params *CreateUserParams) (*CreateUserOK, error) {
+func (a *Client) CreateUser(params *CreateUserParams, authInfo runtime.ClientAuthInfoWriter) (*CreateUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateUserParams()
@@ -70,6 +71,7 @@ func (a *Client) CreateUser(params *CreateUserParams) (*CreateUserOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &CreateUserReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -83,7 +85,7 @@ func (a *Client) CreateUser(params *CreateUserParams) (*CreateUserOK, error) {
 /*
 DeleteUser deletes a specific user
 */
-func (a *Client) DeleteUser(params *DeleteUserParams) (*DeleteUserOK, error) {
+func (a *Client) DeleteUser(params *DeleteUserParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteUserParams()
@@ -98,6 +100,7 @@ func (a *Client) DeleteUser(params *DeleteUserParams) (*DeleteUserOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &DeleteUserReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -111,7 +114,7 @@ func (a *Client) DeleteUser(params *DeleteUserParams) (*DeleteUserOK, error) {
 /*
 DeleteUserFromTeam removes a team from user
 */
-func (a *Client) DeleteUserFromTeam(params *DeleteUserFromTeamParams) (*DeleteUserFromTeamOK, error) {
+func (a *Client) DeleteUserFromTeam(params *DeleteUserFromTeamParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteUserFromTeamOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteUserFromTeamParams()
@@ -126,6 +129,7 @@ func (a *Client) DeleteUserFromTeam(params *DeleteUserFromTeamParams) (*DeleteUs
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &DeleteUserFromTeamReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -139,7 +143,7 @@ func (a *Client) DeleteUserFromTeam(params *DeleteUserFromTeamParams) (*DeleteUs
 /*
 ListUserTeams fetches all teams assigned to user
 */
-func (a *Client) ListUserTeams(params *ListUserTeamsParams) (*ListUserTeamsOK, error) {
+func (a *Client) ListUserTeams(params *ListUserTeamsParams, authInfo runtime.ClientAuthInfoWriter) (*ListUserTeamsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListUserTeamsParams()
@@ -154,6 +158,7 @@ func (a *Client) ListUserTeams(params *ListUserTeamsParams) (*ListUserTeamsOK, e
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &ListUserTeamsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -167,7 +172,7 @@ func (a *Client) ListUserTeams(params *ListUserTeamsParams) (*ListUserTeamsOK, e
 /*
 ListUsers fetches all available users
 */
-func (a *Client) ListUsers(params *ListUsersParams) (*ListUsersOK, error) {
+func (a *Client) ListUsers(params *ListUsersParams, authInfo runtime.ClientAuthInfoWriter) (*ListUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListUsersParams()
@@ -182,6 +187,7 @@ func (a *Client) ListUsers(params *ListUsersParams) (*ListUsersOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &ListUsersReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -195,7 +201,7 @@ func (a *Client) ListUsers(params *ListUsersParams) (*ListUsersOK, error) {
 /*
 PermitUserTeam updates team perms for user
 */
-func (a *Client) PermitUserTeam(params *PermitUserTeamParams) (*PermitUserTeamOK, error) {
+func (a *Client) PermitUserTeam(params *PermitUserTeamParams, authInfo runtime.ClientAuthInfoWriter) (*PermitUserTeamOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPermitUserTeamParams()
@@ -210,6 +216,7 @@ func (a *Client) PermitUserTeam(params *PermitUserTeamParams) (*PermitUserTeamOK
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &PermitUserTeamReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -223,7 +230,7 @@ func (a *Client) PermitUserTeam(params *PermitUserTeamParams) (*PermitUserTeamOK
 /*
 ShowUser fetches a specific user
 */
-func (a *Client) ShowUser(params *ShowUserParams) (*ShowUserOK, error) {
+func (a *Client) ShowUser(params *ShowUserParams, authInfo runtime.ClientAuthInfoWriter) (*ShowUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewShowUserParams()
@@ -238,6 +245,7 @@ func (a *Client) ShowUser(params *ShowUserParams) (*ShowUserOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &ShowUserReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -251,7 +259,7 @@ func (a *Client) ShowUser(params *ShowUserParams) (*ShowUserOK, error) {
 /*
 UpdateUser updates a specific user
 */
-func (a *Client) UpdateUser(params *UpdateUserParams) (*UpdateUserOK, error) {
+func (a *Client) UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateUserParams()
@@ -266,6 +274,7 @@ func (a *Client) UpdateUser(params *UpdateUserParams) (*UpdateUserOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &UpdateUserReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

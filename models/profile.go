@@ -18,18 +18,20 @@ import (
 type Profile struct {
 
 	// active
-	Active bool `json:"active,omitempty"`
+	// Read Only: true
+	Active *bool `json:"active,omitempty"`
 
 	// admin
-	Admin bool `json:"admin,omitempty"`
+	// Read Only: true
+	Admin *bool `json:"admin,omitempty"`
 
 	// created at
+	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
 	// email
-	// Required: true
-	Email *string `json:"email"`
+	Email *string `json:"email,omitempty"`
 
 	// id
 	// Read Only: true
@@ -38,18 +40,18 @@ type Profile struct {
 
 	// password
 	// Format: password
-	Password strfmt.Password `json:"password,omitempty"`
+	Password *strfmt.Password `json:"password,omitempty"`
 
 	// slug
-	Slug string `json:"slug,omitempty"`
+	Slug *string `json:"slug,omitempty"`
 
 	// updated at
+	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// username
-	// Required: true
-	Username *string `json:"username"`
+	Username *string `json:"username,omitempty"`
 }
 
 // Validate validates this profile
@@ -57,10 +59,6 @@ func (m *Profile) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateEmail(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -73,10 +71,6 @@ func (m *Profile) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUsername(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,15 +87,6 @@ func (m *Profile) validateCreatedAt(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *Profile) validateEmail(formats strfmt.Registry) error {
-
-	if err := validate.Required("email", "body", m.Email); err != nil {
 		return err
 	}
 
@@ -141,15 +126,6 @@ func (m *Profile) validateUpdatedAt(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *Profile) validateUsername(formats strfmt.Registry) error {
-
-	if err := validate.Required("username", "body", m.Username); err != nil {
 		return err
 	}
 

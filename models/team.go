@@ -18,6 +18,7 @@ import (
 type Team struct {
 
 	// created at
+	// Read Only: true
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
@@ -27,13 +28,13 @@ type Team struct {
 	ID strfmt.UUID `json:"id,omitempty"`
 
 	// name
-	// Required: true
-	Name *string `json:"name"`
+	Name *string `json:"name,omitempty"`
 
 	// slug
-	Slug string `json:"slug,omitempty"`
+	Slug *string `json:"slug,omitempty"`
 
 	// updated at
+	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 }
@@ -47,10 +48,6 @@ func (m *Team) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateID(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -84,15 +81,6 @@ func (m *Team) validateID(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *Team) validateName(formats strfmt.Registry) error {
-
-	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
 	}
 

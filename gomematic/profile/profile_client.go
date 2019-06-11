@@ -25,9 +25,9 @@ type Client struct {
 }
 
 /*
-ShowProfile retrieves an unlimited auth token
+ShowProfile fetches profile details of the personal account
 */
-func (a *Client) ShowProfile(params *ShowProfileParams) (*ShowProfileOK, error) {
+func (a *Client) ShowProfile(params *ShowProfileParams, authInfo runtime.ClientAuthInfoWriter) (*ShowProfileOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewShowProfileParams()
@@ -42,6 +42,7 @@ func (a *Client) ShowProfile(params *ShowProfileParams) (*ShowProfileOK, error) 
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &ShowProfileReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -55,7 +56,7 @@ func (a *Client) ShowProfile(params *ShowProfileParams) (*ShowProfileOK, error) 
 /*
 TokenProfile retrieves an unlimited auth token
 */
-func (a *Client) TokenProfile(params *TokenProfileParams) (*TokenProfileOK, error) {
+func (a *Client) TokenProfile(params *TokenProfileParams, authInfo runtime.ClientAuthInfoWriter) (*TokenProfileOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTokenProfileParams()
@@ -70,6 +71,7 @@ func (a *Client) TokenProfile(params *TokenProfileParams) (*TokenProfileOK, erro
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &TokenProfileReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -81,9 +83,9 @@ func (a *Client) TokenProfile(params *TokenProfileParams) (*TokenProfileOK, erro
 }
 
 /*
-UpdateProfile retrieves an unlimited auth token
+UpdateProfile updates your own profile information
 */
-func (a *Client) UpdateProfile(params *UpdateProfileParams) (*UpdateProfileOK, error) {
+func (a *Client) UpdateProfile(params *UpdateProfileParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateProfileOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateProfileParams()
@@ -98,6 +100,7 @@ func (a *Client) UpdateProfile(params *UpdateProfileParams) (*UpdateProfileOK, e
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &UpdateProfileReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

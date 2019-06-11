@@ -39,6 +39,13 @@ func (o *AppendUserToTeamReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return nil, result
 
+	case 404:
+		result := NewAppendUserToTeamNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 412:
 		result := NewAppendUserToTeamPreconditionFailed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -123,6 +130,35 @@ func (o *AppendUserToTeamForbidden) readResponse(response runtime.ClientResponse
 	return nil
 }
 
+// NewAppendUserToTeamNotFound creates a AppendUserToTeamNotFound with default headers values
+func NewAppendUserToTeamNotFound() *AppendUserToTeamNotFound {
+	return &AppendUserToTeamNotFound{}
+}
+
+/*AppendUserToTeamNotFound handles this case with default header values.
+
+User or team not found
+*/
+type AppendUserToTeamNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *AppendUserToTeamNotFound) Error() string {
+	return fmt.Sprintf("[POST /users/{user_id}/teams][%d] appendUserToTeamNotFound  %+v", 404, o.Payload)
+}
+
+func (o *AppendUserToTeamNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewAppendUserToTeamPreconditionFailed creates a AppendUserToTeamPreconditionFailed with default headers values
 func NewAppendUserToTeamPreconditionFailed() *AppendUserToTeamPreconditionFailed {
 	return &AppendUserToTeamPreconditionFailed{}
@@ -130,7 +166,7 @@ func NewAppendUserToTeamPreconditionFailed() *AppendUserToTeamPreconditionFailed
 
 /*AppendUserToTeamPreconditionFailed handles this case with default header values.
 
-Failed to parse request body
+Team is already assigned
 */
 type AppendUserToTeamPreconditionFailed struct {
 	Payload *models.GeneralError
@@ -159,10 +195,10 @@ func NewAppendUserToTeamUnprocessableEntity() *AppendUserToTeamUnprocessableEnti
 
 /*AppendUserToTeamUnprocessableEntity handles this case with default header values.
 
-Team is already assigned
+Failed to validate request
 */
 type AppendUserToTeamUnprocessableEntity struct {
-	Payload *models.GeneralError
+	Payload *models.ValidationError
 }
 
 func (o *AppendUserToTeamUnprocessableEntity) Error() string {
@@ -171,7 +207,7 @@ func (o *AppendUserToTeamUnprocessableEntity) Error() string {
 
 func (o *AppendUserToTeamUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.GeneralError)
+	o.Payload = new(models.ValidationError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

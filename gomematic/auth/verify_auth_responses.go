@@ -65,7 +65,7 @@ type VerifyAuthOK struct {
 }
 
 func (o *VerifyAuthOK) Error() string {
-	return fmt.Sprintf("[GET /auth/verify/{token}][%d] verifyAuthOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /auth/verify][%d] verifyAuthOK  %+v", 200, o.Payload)
 }
 
 func (o *VerifyAuthOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -94,7 +94,7 @@ type VerifyAuthUnauthorized struct {
 }
 
 func (o *VerifyAuthUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /auth/verify/{token}][%d] verifyAuthUnauthorized  %+v", 401, o.Payload)
+	return fmt.Sprintf("[GET /auth/verify][%d] verifyAuthUnauthorized  %+v", 401, o.Payload)
 }
 
 func (o *VerifyAuthUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -132,7 +132,7 @@ func (o *VerifyAuthDefault) Code() int {
 }
 
 func (o *VerifyAuthDefault) Error() string {
-	return fmt.Sprintf("[GET /auth/verify/{token}][%d] VerifyAuth default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /auth/verify][%d] VerifyAuth default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *VerifyAuthDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

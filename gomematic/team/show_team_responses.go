@@ -39,6 +39,13 @@ func (o *ShowTeamReader) ReadResponse(response runtime.ClientResponse, consumer 
 		}
 		return nil, result
 
+	case 404:
+		result := NewShowTeamNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		result := NewShowTeamDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -98,6 +105,35 @@ func (o *ShowTeamForbidden) Error() string {
 }
 
 func (o *ShowTeamForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewShowTeamNotFound creates a ShowTeamNotFound with default headers values
+func NewShowTeamNotFound() *ShowTeamNotFound {
+	return &ShowTeamNotFound{}
+}
+
+/*ShowTeamNotFound handles this case with default header values.
+
+Team not found
+*/
+type ShowTeamNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *ShowTeamNotFound) Error() string {
+	return fmt.Sprintf("[GET /teams/{team_id}][%d] showTeamNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ShowTeamNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

@@ -46,6 +46,13 @@ func (o *DeleteTeamReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
+	case 404:
+		result := NewDeleteTeamNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		result := NewDeleteTeamDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -134,6 +141,35 @@ func (o *DeleteTeamForbidden) Error() string {
 }
 
 func (o *DeleteTeamForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteTeamNotFound creates a DeleteTeamNotFound with default headers values
+func NewDeleteTeamNotFound() *DeleteTeamNotFound {
+	return &DeleteTeamNotFound{}
+}
+
+/*DeleteTeamNotFound handles this case with default header values.
+
+Team not found
+*/
+type DeleteTeamNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *DeleteTeamNotFound) Error() string {
+	return fmt.Sprintf("[DELETE /teams/{team_id}][%d] deleteTeamNotFound  %+v", 404, o.Payload)
+}
+
+func (o *DeleteTeamNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

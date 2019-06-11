@@ -39,8 +39,8 @@ func (o *UpdateUserReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
-	case 412:
-		result := NewUpdateUserPreconditionFailed()
+	case 404:
+		result := NewUpdateUserNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -123,24 +123,24 @@ func (o *UpdateUserForbidden) readResponse(response runtime.ClientResponse, cons
 	return nil
 }
 
-// NewUpdateUserPreconditionFailed creates a UpdateUserPreconditionFailed with default headers values
-func NewUpdateUserPreconditionFailed() *UpdateUserPreconditionFailed {
-	return &UpdateUserPreconditionFailed{}
+// NewUpdateUserNotFound creates a UpdateUserNotFound with default headers values
+func NewUpdateUserNotFound() *UpdateUserNotFound {
+	return &UpdateUserNotFound{}
 }
 
-/*UpdateUserPreconditionFailed handles this case with default header values.
+/*UpdateUserNotFound handles this case with default header values.
 
-Failed to parse request body
+User not found
 */
-type UpdateUserPreconditionFailed struct {
+type UpdateUserNotFound struct {
 	Payload *models.GeneralError
 }
 
-func (o *UpdateUserPreconditionFailed) Error() string {
-	return fmt.Sprintf("[PUT /users/{user_id}][%d] updateUserPreconditionFailed  %+v", 412, o.Payload)
+func (o *UpdateUserNotFound) Error() string {
+	return fmt.Sprintf("[PUT /users/{user_id}][%d] updateUserNotFound  %+v", 404, o.Payload)
 }
 
-func (o *UpdateUserPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *UpdateUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

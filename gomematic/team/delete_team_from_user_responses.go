@@ -39,15 +39,15 @@ func (o *DeleteTeamFromUserReader) ReadResponse(response runtime.ClientResponse,
 		}
 		return nil, result
 
-	case 412:
-		result := NewDeleteTeamFromUserPreconditionFailed()
+	case 404:
+		result := NewDeleteTeamFromUserNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
 
-	case 422:
-		result := NewDeleteTeamFromUserUnprocessableEntity()
+	case 412:
+		result := NewDeleteTeamFromUserPreconditionFailed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
@@ -123,24 +123,24 @@ func (o *DeleteTeamFromUserForbidden) readResponse(response runtime.ClientRespon
 	return nil
 }
 
-// NewDeleteTeamFromUserPreconditionFailed creates a DeleteTeamFromUserPreconditionFailed with default headers values
-func NewDeleteTeamFromUserPreconditionFailed() *DeleteTeamFromUserPreconditionFailed {
-	return &DeleteTeamFromUserPreconditionFailed{}
+// NewDeleteTeamFromUserNotFound creates a DeleteTeamFromUserNotFound with default headers values
+func NewDeleteTeamFromUserNotFound() *DeleteTeamFromUserNotFound {
+	return &DeleteTeamFromUserNotFound{}
 }
 
-/*DeleteTeamFromUserPreconditionFailed handles this case with default header values.
+/*DeleteTeamFromUserNotFound handles this case with default header values.
 
-Failed to parse request body
+Team or user not found
 */
-type DeleteTeamFromUserPreconditionFailed struct {
+type DeleteTeamFromUserNotFound struct {
 	Payload *models.GeneralError
 }
 
-func (o *DeleteTeamFromUserPreconditionFailed) Error() string {
-	return fmt.Sprintf("[DELETE /teams/{team_id}/users][%d] deleteTeamFromUserPreconditionFailed  %+v", 412, o.Payload)
+func (o *DeleteTeamFromUserNotFound) Error() string {
+	return fmt.Sprintf("[DELETE /teams/{team_id}/users][%d] deleteTeamFromUserNotFound  %+v", 404, o.Payload)
 }
 
-func (o *DeleteTeamFromUserPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *DeleteTeamFromUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 
@@ -152,24 +152,24 @@ func (o *DeleteTeamFromUserPreconditionFailed) readResponse(response runtime.Cli
 	return nil
 }
 
-// NewDeleteTeamFromUserUnprocessableEntity creates a DeleteTeamFromUserUnprocessableEntity with default headers values
-func NewDeleteTeamFromUserUnprocessableEntity() *DeleteTeamFromUserUnprocessableEntity {
-	return &DeleteTeamFromUserUnprocessableEntity{}
+// NewDeleteTeamFromUserPreconditionFailed creates a DeleteTeamFromUserPreconditionFailed with default headers values
+func NewDeleteTeamFromUserPreconditionFailed() *DeleteTeamFromUserPreconditionFailed {
+	return &DeleteTeamFromUserPreconditionFailed{}
 }
 
-/*DeleteTeamFromUserUnprocessableEntity handles this case with default header values.
+/*DeleteTeamFromUserPreconditionFailed handles this case with default header values.
 
 User is not assigned
 */
-type DeleteTeamFromUserUnprocessableEntity struct {
+type DeleteTeamFromUserPreconditionFailed struct {
 	Payload *models.GeneralError
 }
 
-func (o *DeleteTeamFromUserUnprocessableEntity) Error() string {
-	return fmt.Sprintf("[DELETE /teams/{team_id}/users][%d] deleteTeamFromUserUnprocessableEntity  %+v", 422, o.Payload)
+func (o *DeleteTeamFromUserPreconditionFailed) Error() string {
+	return fmt.Sprintf("[DELETE /teams/{team_id}/users][%d] deleteTeamFromUserPreconditionFailed  %+v", 412, o.Payload)
 }
 
-func (o *DeleteTeamFromUserUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+func (o *DeleteTeamFromUserPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

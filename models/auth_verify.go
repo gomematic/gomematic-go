@@ -18,13 +18,14 @@ import (
 type AuthVerify struct {
 
 	// created at
-	// Required: true
+	// Read Only: true
 	// Format: date-time
-	CreatedAt *strfmt.DateTime `json:"created_at"`
+	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 
 	// username
 	// Required: true
-	Username *string `json:"username"`
+	// Read Only: true
+	Username string `json:"username"`
 }
 
 // Validate validates this auth verify
@@ -47,8 +48,8 @@ func (m *AuthVerify) Validate(formats strfmt.Registry) error {
 
 func (m *AuthVerify) validateCreatedAt(formats strfmt.Registry) error {
 
-	if err := validate.Required("created_at", "body", m.CreatedAt); err != nil {
-		return err
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
 	}
 
 	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
@@ -60,7 +61,7 @@ func (m *AuthVerify) validateCreatedAt(formats strfmt.Registry) error {
 
 func (m *AuthVerify) validateUsername(formats strfmt.Registry) error {
 
-	if err := validate.Required("username", "body", m.Username); err != nil {
+	if err := validate.RequiredString("username", "body", string(m.Username)); err != nil {
 		return err
 	}
 

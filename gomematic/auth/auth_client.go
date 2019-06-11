@@ -55,7 +55,7 @@ func (a *Client) LoginUser(params *LoginUserParams) (*LoginUserOK, error) {
 /*
 RefreshAuth refreshes an auth token before it expires
 */
-func (a *Client) RefreshAuth(params *RefreshAuthParams) (*RefreshAuthOK, error) {
+func (a *Client) RefreshAuth(params *RefreshAuthParams, authInfo runtime.ClientAuthInfoWriter) (*RefreshAuthOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRefreshAuthParams()
@@ -70,6 +70,7 @@ func (a *Client) RefreshAuth(params *RefreshAuthParams) (*RefreshAuthOK, error) 
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &RefreshAuthReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -83,7 +84,7 @@ func (a *Client) RefreshAuth(params *RefreshAuthParams) (*RefreshAuthOK, error) 
 /*
 VerifyAuth verifies validity for an authentication token
 */
-func (a *Client) VerifyAuth(params *VerifyAuthParams) (*VerifyAuthOK, error) {
+func (a *Client) VerifyAuth(params *VerifyAuthParams, authInfo runtime.ClientAuthInfoWriter) (*VerifyAuthOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewVerifyAuthParams()
@@ -92,12 +93,13 @@ func (a *Client) VerifyAuth(params *VerifyAuthParams) (*VerifyAuthOK, error) {
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "VerifyAuth",
 		Method:             "GET",
-		PathPattern:        "/auth/verify/{token}",
+		PathPattern:        "/auth/verify",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &VerifyAuthReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

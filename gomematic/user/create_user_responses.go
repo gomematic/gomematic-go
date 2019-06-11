@@ -39,13 +39,6 @@ func (o *CreateUserReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
-	case 412:
-		result := NewCreateUserPreconditionFailed()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
 	case 422:
 		result := NewCreateUserUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -112,35 +105,6 @@ func (o *CreateUserForbidden) Error() string {
 }
 
 func (o *CreateUserForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.GeneralError)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateUserPreconditionFailed creates a CreateUserPreconditionFailed with default headers values
-func NewCreateUserPreconditionFailed() *CreateUserPreconditionFailed {
-	return &CreateUserPreconditionFailed{}
-}
-
-/*CreateUserPreconditionFailed handles this case with default header values.
-
-Failed to parse request body
-*/
-type CreateUserPreconditionFailed struct {
-	Payload *models.GeneralError
-}
-
-func (o *CreateUserPreconditionFailed) Error() string {
-	return fmt.Sprintf("[POST /users][%d] createUserPreconditionFailed  %+v", 412, o.Payload)
-}
-
-func (o *CreateUserPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

@@ -19,15 +19,33 @@ import (
 // swagger:model team_user
 type TeamUser struct {
 
+	// created at
+	// Read Only: true
+	// Format: date-time
+	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
+
 	// perm
 	// Required: true
 	// Enum: [user admin owner]
 	Perm *string `json:"perm"`
 
+	// team
+	// Read Only: true
+	Team *Team `json:"team,omitempty"`
+
 	// team id
 	// Required: true
 	// Format: uuid
 	TeamID *strfmt.UUID `json:"team_id"`
+
+	// updated at
+	// Read Only: true
+	// Format: date-time
+	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// user
+	// Read Only: true
+	User *User `json:"user,omitempty"`
 
 	// user id
 	// Required: true
@@ -39,11 +57,27 @@ type TeamUser struct {
 func (m *TeamUser) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePerm(formats); err != nil {
 		res = append(res, err)
 	}
 
+	if err := m.validateTeam(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTeamID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUser(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -54,6 +88,19 @@ func (m *TeamUser) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *TeamUser) validateCreatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -103,6 +150,24 @@ func (m *TeamUser) validatePerm(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *TeamUser) validateTeam(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Team) { // not required
+		return nil
+	}
+
+	if m.Team != nil {
+		if err := m.Team.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("team")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TeamUser) validateTeamID(formats strfmt.Registry) error {
 
 	if err := validate.Required("team_id", "body", m.TeamID); err != nil {
@@ -111,6 +176,37 @@ func (m *TeamUser) validateTeamID(formats strfmt.Registry) error {
 
 	if err := validate.FormatOf("team_id", "body", "uuid", m.TeamID.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *TeamUser) validateUpdatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.UpdatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *TeamUser) validateUser(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.User) { // not required
+		return nil
+	}
+
+	if m.User != nil {
+		if err := m.User.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("user")
+			}
+			return err
+		}
 	}
 
 	return nil

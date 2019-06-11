@@ -18,13 +18,14 @@ import (
 type AuthToken struct {
 
 	// expires at
-	// Required: true
+	// Read Only: true
 	// Format: date-time
-	ExpiresAt *strfmt.DateTime `json:"expires_at"`
+	ExpiresAt *strfmt.DateTime `json:"expires_at,omitempty"`
 
 	// token
 	// Required: true
-	Token *string `json:"token"`
+	// Read Only: true
+	Token string `json:"token"`
 }
 
 // Validate validates this auth token
@@ -47,8 +48,8 @@ func (m *AuthToken) Validate(formats strfmt.Registry) error {
 
 func (m *AuthToken) validateExpiresAt(formats strfmt.Registry) error {
 
-	if err := validate.Required("expires_at", "body", m.ExpiresAt); err != nil {
-		return err
+	if swag.IsZero(m.ExpiresAt) { // not required
+		return nil
 	}
 
 	if err := validate.FormatOf("expires_at", "body", "date-time", m.ExpiresAt.String(), formats); err != nil {
@@ -60,7 +61,7 @@ func (m *AuthToken) validateExpiresAt(formats strfmt.Registry) error {
 
 func (m *AuthToken) validateToken(formats strfmt.Registry) error {
 
-	if err := validate.Required("token", "body", m.Token); err != nil {
+	if err := validate.RequiredString("token", "body", string(m.Token)); err != nil {
 		return err
 	}
 

@@ -39,6 +39,13 @@ func (o *ListTeamUsersReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return nil, result
 
+	case 404:
+		result := NewListTeamUsersNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		result := NewListTeamUsersDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -96,6 +103,35 @@ func (o *ListTeamUsersForbidden) Error() string {
 }
 
 func (o *ListTeamUsersForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.GeneralError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewListTeamUsersNotFound creates a ListTeamUsersNotFound with default headers values
+func NewListTeamUsersNotFound() *ListTeamUsersNotFound {
+	return &ListTeamUsersNotFound{}
+}
+
+/*ListTeamUsersNotFound handles this case with default header values.
+
+Team not found
+*/
+type ListTeamUsersNotFound struct {
+	Payload *models.GeneralError
+}
+
+func (o *ListTeamUsersNotFound) Error() string {
+	return fmt.Sprintf("[GET /teams/{team_id}/users][%d] listTeamUsersNotFound  %+v", 404, o.Payload)
+}
+
+func (o *ListTeamUsersNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

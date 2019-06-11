@@ -39,13 +39,6 @@ func (o *UpdateProfileReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return nil, result
 
-	case 412:
-		result := NewUpdateProfilePreconditionFailed()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
 	case 422:
 		result := NewUpdateProfileUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -112,35 +105,6 @@ func (o *UpdateProfileForbidden) Error() string {
 }
 
 func (o *UpdateProfileForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.GeneralError)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewUpdateProfilePreconditionFailed creates a UpdateProfilePreconditionFailed with default headers values
-func NewUpdateProfilePreconditionFailed() *UpdateProfilePreconditionFailed {
-	return &UpdateProfilePreconditionFailed{}
-}
-
-/*UpdateProfilePreconditionFailed handles this case with default header values.
-
-Failed to parse request body
-*/
-type UpdateProfilePreconditionFailed struct {
-	Payload *models.GeneralError
-}
-
-func (o *UpdateProfilePreconditionFailed) Error() string {
-	return fmt.Sprintf("[PUT /profile/self][%d] updateProfilePreconditionFailed  %+v", 412, o.Payload)
-}
-
-func (o *UpdateProfilePreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 

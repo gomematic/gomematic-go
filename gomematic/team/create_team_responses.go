@@ -39,13 +39,6 @@ func (o *CreateTeamReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
-	case 412:
-		result := NewCreateTeamPreconditionFailed()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
 	case 422:
 		result := NewCreateTeamUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -112,35 +105,6 @@ func (o *CreateTeamForbidden) Error() string {
 }
 
 func (o *CreateTeamForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.GeneralError)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewCreateTeamPreconditionFailed creates a CreateTeamPreconditionFailed with default headers values
-func NewCreateTeamPreconditionFailed() *CreateTeamPreconditionFailed {
-	return &CreateTeamPreconditionFailed{}
-}
-
-/*CreateTeamPreconditionFailed handles this case with default header values.
-
-Failed to parse request body
-*/
-type CreateTeamPreconditionFailed struct {
-	Payload *models.GeneralError
-}
-
-func (o *CreateTeamPreconditionFailed) Error() string {
-	return fmt.Sprintf("[POST /teams][%d] createTeamPreconditionFailed  %+v", 412, o.Payload)
-}
-
-func (o *CreateTeamPreconditionFailed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.GeneralError)
 
