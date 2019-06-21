@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"strconv"
+
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
@@ -43,6 +45,10 @@ type User struct {
 	// slug
 	Slug *string `json:"slug,omitempty"`
 
+	// teams
+	// Read Only: true
+	Teams []*TeamUser `json:"teams,omitempty"`
+
 	// updated at
 	// Read Only: true
 	// Format: date-time
@@ -65,6 +71,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTeams(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -112,6 +122,31 @@ func (m *User) validatePassword(formats strfmt.Registry) error {
 
 	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateTeams(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Teams) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Teams); i++ {
+		if swag.IsZero(m.Teams[i]) { // not required
+			continue
+		}
+
+		if m.Teams[i] != nil {
+			if err := m.Teams[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("teams" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

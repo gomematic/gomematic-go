@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"strconv"
+
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
@@ -37,6 +39,10 @@ type Team struct {
 	// Read Only: true
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// users
+	// Read Only: true
+	Users []*TeamUser `json:"users,omitempty"`
 }
 
 // Validate validates this team
@@ -52,6 +58,10 @@ func (m *Team) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUsers(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -95,6 +105,31 @@ func (m *Team) validateUpdatedAt(formats strfmt.Registry) error {
 
 	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *Team) validateUsers(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Users) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Users); i++ {
+		if swag.IsZero(m.Users[i]) { // not required
+			continue
+		}
+
+		if m.Users[i] != nil {
+			if err := m.Users[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("users" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil
